@@ -98,7 +98,7 @@ int main(void)
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
-	for(;;){
+	while(1){
 
 	}
 }
