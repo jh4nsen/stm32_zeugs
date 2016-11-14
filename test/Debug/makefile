@@ -48,7 +48,7 @@ all: test.elf
 test.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU G++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -L"/home/me/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug" -T"/home/me/Ac6/SystemWorkbench/workspace/stm32_zeugs/test/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -fno-exceptions -fno-rtti -lm -o "test.elf" @"objects.list" $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -L"/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug" -T"/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32_zeugs/test/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -fno-exceptions -fno-rtti -lm -o "test.elf" @"objects.list" $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

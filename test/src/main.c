@@ -24,7 +24,7 @@ static TIM_HandleTypeDef PWM_Instance = {
 
 void init_Timer( int period){
 	__TIM2_CLK_ENABLE();
-	Timer_Instance.Init.Prescaler = 40000;
+	Timer_Instance.Init.Prescaler = 4000;
 	Timer_Instance.Init.CounterMode = TIM_COUNTERMODE_UP;
 	Timer_Instance.Init.Period = period;
 	Timer_Instance.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -35,7 +35,7 @@ void init_Timer( int period){
 
 void init_PWM(int period){
 	__HAL_RCC_TIM1_CLK_ENABLE();
-	PWM_Instance.Init.Prescaler = 40000;
+	PWM_Instance.Init.Prescaler = 4000;
 	PWM_Instance.Init.CounterMode = TIM_COUNTERMODE_UP;
 	PWM_Instance.Init.Period = period;
 	PWM_Instance.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -49,16 +49,24 @@ void init_PWM(int period){
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	sConfigOC.Pulse = 200;
-
 	HAL_TIM_PWM_ConfigChannel(&PWM_Instance, &sConfigOC, TIM_CHANNEL_1);
+
+	sConfigOC.Pulse = 100;
+	HAL_TIM_PWM_ConfigChannel(&PWM_Instance, &sConfigOC, TIM_CHANNEL_2);
+
+	sConfigOC.Pulse = 300;
+	HAL_TIM_PWM_ConfigChannel(&PWM_Instance, &sConfigOC, TIM_CHANNEL_3);
+
 	//HAL_TIM_PWM_MspInit(&PWM_Instance);
 	HAL_TIM_PWM_Start(&PWM_Instance, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&PWM_Instance, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&PWM_Instance, TIM_CHANNEL_3);
 }
 
 void init_PWM_LED(){
 	__HAL_RCC_GPIOE_CLK_ENABLE();
 	GPIO_InitTypeDef PWM_LED;
-	PWM_LED.Pin = GPIO_PIN_9;
+	PWM_LED.Pin = GPIO_PIN_9 | GPIO_PIN_11 | GPIO_PIN_13;
 	PWM_LED.Mode = GPIO_MODE_AF_PP;
 	PWM_LED.Alternate = GPIO_AF2_TIM1;
 	PWM_LED.Speed = GPIO_SPEED_FREQ_HIGH;
