@@ -42,13 +42,16 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: test.elf
+all: test2.elf
+
+dependents:
+	-cd /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug && $(MAKE) all
 
 # Tool invocations
-test.elf: $(OBJS) $(USER_OBJS)
+test2.elf: $(OBJS) $(USER_OBJS) /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug/libstm32f3discovery_hal_lib.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU G++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -L"/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug" -T"/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32_zeugs/test/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -fno-exceptions -fno-rtti -lm -o "test.elf" @"objects.list" $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -L"/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug" -T"/homes/14jhansen/Ac6/SystemWorkbench/workspace/test2/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -fno-exceptions -fno-rtti -lm -o "test2.elf" @"objects.list" $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -60,11 +63,12 @@ clean:
 
 post-build:
 	-@echo 'Generating binary and Printing size information:'
-	arm-none-eabi-objcopy -O binary "test.elf" "test.bin"
-	arm-none-eabi-size "test.elf"
+	arm-none-eabi-objcopy -O binary "test2.elf" "test2.bin"
+	arm-none-eabi-size "test2.elf"
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY: post-build
+/homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Debug/libstm32f3discovery_hal_lib.a:
 
 -include ../makefile.targets
