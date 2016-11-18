@@ -78,12 +78,27 @@ void init_LED(){
 	__HAL_RCC_GPIOE_CLK_ENABLE();
 	GPIO_InitTypeDef GPIO_InitStructure;
 	//PORTE pin 8 = blue LED
-	GPIO_InitStructure.Pin = GPIO_PIN_8;
+	//PORTE pin 11 = orange LED
+	GPIO_InitStructure.Pin = GPIO_PIN_8 | GPIO_PIN_10;
 	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStructure.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOE, &GPIO_InitStructure);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET);
+}
+
+void init_UserButton(){
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	GPIO_InitTypeDef GPIO_Struct;
+	//PORTA pin 0 = User Button
+	GPIO_Struct.Pin = GPIO_PIN_0;
+	GPIO_Struct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_Struct.Pull = GPIO_PULLUP;
+	GPIO_Struct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOA, &GPIO_Struct);
+
+	HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
+	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
 void TIM2_IRQHandler(){
@@ -95,10 +110,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_8);
 }
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	if(GPIO_Pin == GPIO_PIN_0){
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_11);
+	}
+}
+
 int main(void)
 {
 	HAL_Init();
 	init_LED();
+	initUserButton();
 	init_PWM_LED();
 	init_PWM(500);
 	init_Timer(500);

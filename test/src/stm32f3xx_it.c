@@ -40,3 +40,7 @@ void SysTick_Handler(void)
 	osSystickHandler();
 #endif
 }
+
+void EXTI0_IRQHandler(){
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+}
