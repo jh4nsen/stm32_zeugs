@@ -14,6 +14,8 @@
 #include "stm32f3xx_hal.h"
 #include <stm32f3xx_it.h>
 
+#include "table.h"
+
 #define CH1N_LED GPIO_PIN_8
 #define CH1_LED GPIO_PIN_9
 #define CH2N_LED GPIO_PIN_10
@@ -21,12 +23,13 @@
 #define CH3N_LED GPIO_PIN_12
 #define CH3_LED GPIO_PIN_13
 
-#define PERIOD (900 -1)
+#define PERIOD (260 -1)
 // PERIOD = F_CPU/PRESCALER/F_PWM
-#define CH1_PULSE 800
-#define CH2_PULSE 600
-#define CH3_PULSE 400
+#define CH1_PULSE 50
+#define CH2_PULSE 100
+#define CH3_PULSE 250
 // PULSE = DutyCycle * (PERIOD -1) /100
+
 
 static TIM_HandleTypeDef Timer_Instance = {
     .Instance = TIM2
@@ -36,11 +39,15 @@ static TIM_HandleTypeDef PWM_Instance = {
 		.Instance = TIM1
 };
 
+uint8_t position1 = 0;
+uint8_t position2 = 64;
+uint8_t position3 = 128;
+
 static TIM_OC_InitTypeDef sConfigOC;
 
 void init_Timer(int period){
 	__TIM2_CLK_ENABLE();
-	Timer_Instance.Init.Prescaler = 4000;
+	Timer_Instance.Init.Prescaler = 1000;
 	Timer_Instance.Init.CounterMode = TIM_COUNTERMODE_UP;
 	Timer_Instance.Init.Period = period;
 	Timer_Instance.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -53,7 +60,7 @@ void init_Timer(int period){
 
 void init_PWM(){
 	__HAL_RCC_TIM1_CLK_ENABLE();
-	PWM_Instance.Init.Prescaler = 2000;
+	PWM_Instance.Init.Prescaler = 9;
 	PWM_Instance.Init.CounterMode = TIM_COUNTERMODE_UP;
 	PWM_Instance.Init.Period = PERIOD;
 	PWM_Instance.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -138,7 +145,13 @@ void TIM2_IRQHandler(){
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM2)
-		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_14);
+		position1 += 10;
+		position2 += 20;
+		position3 += 30;
+
+		TIM1->CCR1 = table[position1];
+		TIM1->CCR2 = table[position2];
+		TIM1->CCR3 = table[position3];
 }
 
 /*
@@ -162,19 +175,10 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	//HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 
-	int pulse = 0;
-
 	while(1){
 		if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)){
 			flag++;
 			//HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_10);
-
-			if(pulse < CH1_PULSE){
-				pulse += 50;
-			}else{
-				pulse = 0;
-			}
-			TIM1->CCR1 = pulse;
 
 		}
 

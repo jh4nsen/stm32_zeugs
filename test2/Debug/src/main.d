@@ -60,7 +60,8 @@ src/main.o: ../src/main.c \
  /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/HAL_Driver/Inc/stm32f3xx_hal_usart_ex.h \
  /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/HAL_Driver/Inc/stm32f3xx_hal_wwdg.h \
  /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Utilities/STM32F3-Discovery/stm32f3_discovery.h \
- /homes/14jhansen/Ac6/SystemWorkbench/workspace/test2/inc/stm32f3xx_it.h
+ /homes/14jhansen/Ac6/SystemWorkbench/workspace/test2/inc/stm32f3xx_it.h \
+ ../src/table.h
 
 /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/CMSIS/device/stm32f3xx.h:
 
@@ -185,3 +186,5 @@ src/main.o: ../src/main.c \
 /homes/14jhansen/Ac6/SystemWorkbench/workspace/stm32f3discovery_hal_lib/Utilities/STM32F3-Discovery/stm32f3_discovery.h:
 
 /homes/14jhansen/Ac6/SystemWorkbench/workspace/test2/inc/stm32f3xx_it.h:
+
+../src/table.h:
